@@ -2,7 +2,7 @@
 
 'use strict';
 
-var raml = require('raml-parser');
+var raml = require('raml-1-parser');
 var fs = require('fs');
 var Q = require('q');
 
@@ -84,7 +84,7 @@ function _sourceToRamlObj(source) {
   if (typeof source === 'string') {
     if (fs.existsSync(source) || source.indexOf('http') === 0) {
       // Parse as file or url
-      return raml.loadFile(source);
+      return raml.loadApi(source);
     }
 
     // Parse as string or buffer
@@ -105,8 +105,23 @@ function _sourceToRamlObj(source) {
 }
 
 function parse(source) {
-  return _sourceToRamlObj(source).then(function(ramlObj) {
-    return _enhanceRamlObj(ramlObj);
+  return _sourceToRamlObj(source).then(function(api) {
+    api.errors().forEach(function(x){
+      if (x.isWarning) {
+        return;
+      }
+
+      console.log('Error in parsing: ', JSON.stringify({
+        code:      x.code,
+        message:   x.message,
+        path:      x.path,
+        line:      x.line,
+        column:    x.column,
+        isWarning: x.isWarning
+      },null,2));
+    });
+
+    return _enhanceRamlObj(api.toJSON());
   });
 }
 
