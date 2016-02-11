@@ -117,9 +117,17 @@ function parse(source) {
         path:      x.path,
         line:      x.line,
         column:    x.column,
-        isWarning: x.isWarning
+        isWarning: x.isWarning,
+        self:      x
       },null,2));
     });
+
+    //console.log('!');
+    //console.log(api._node._children["0"]._node._node.value.mappings["1"].value.mappings["1"]);
+    //console.log(api._node._children["0"]._node._node.value.mappings["1"].value.mappings["1"]);
+    //if (api._node._children["0"]._node._node.value.value.match(/New API/)) {
+    //  console.log('!!');
+    //}
 
     return _enhanceRamlObj(api.toJSON());
   });
