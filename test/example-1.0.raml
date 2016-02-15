@@ -75,7 +75,25 @@ traits:
             properties:
               success: boolean
               statusCode?: integer
-
+uses:
+  houses:
+    types:
+      post:
+        displayName: House
+        properties:
+          address: string
+          construction_date?: date
+          tech_status?:
+            type: number
+            format: float
+            example: "83.25"
+          num_of_floors: number
+          surrounding_area: number
+      get:
+        displayName: House
+        type: houses.post
+        properties:
+          house_id: integer
 
 /helloWorld:
   get:

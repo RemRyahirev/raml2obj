@@ -121,27 +121,9 @@ function parse(source) {
             }, null, 2));
         });
 
-        //console.log('!');
-        //console.log(api._node._children["0"]._node._node.value.mappings["1"].value.mappings["1"]);
-        //console.log(api._node._children["0"]._node._node.value.mappings["1"].value.mappings["1"]);
-
         var json = api.toJSON();
 
-        //api.allResources().forEach(function(resource) {
-        //    console.log(resource.absoluteUri());
-        //
-        //    resource.methods().forEach(function(method) {
-        //        console.log('    ', method.method());
-        //
-        //        method.responses().forEach(function(response) {
-        //            console.log('        ', response.code().value());
-        //        });
-        //    });
-        //});
-
-        //var util = require('util');
-        //console.log();
-        //console.log();
+        var util = require('util');
 
         var processProps = function(obj, prop) {
             var propName = prop.name();
@@ -310,9 +292,23 @@ function parse(source) {
             });
         });
 
-        //console.log();
-        //console.log();
-        //console.log(util.inspect(json, {showHidden: false, depth: null}));
+        // uses
+        api.uses().forEach(function(u) {
+            var uName = u.name();
+            console.log('u', uName);
+            u.types().forEach(function(t) {
+                var tName = t.name();
+                if (t.properties) {
+                    t.properties().forEach(function(p) {
+                        json.uses[uName].types[tName] = processProps(json.uses[uName].types[tName], p);
+                    });
+                }
+            });
+        });
+
+        console.log();
+        console.log();
+        console.log(util.inspect(json, {showHidden: false, depth: null}));
 
         return _enhanceRamlObj(json);
     });
