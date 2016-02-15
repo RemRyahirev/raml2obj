@@ -107,7 +107,10 @@ function _sourceToRamlObj(source) {
 function parse(source) {
     return _sourceToRamlObj(source).then(function (api) {
         api.errors().forEach(function (x) {
-            if (x.isWarning || x.code === 10 || x.message.match(/^Unrecognized type '[^']*\.[^']]'/i) || x.message.match(/^Unrecognized type .* libraries/i)) {
+            if (x.isWarning
+                || x.code === 10
+                || x.message.match(/^Unrecognized type '[^']*\.[^']]'/i)
+                || x.message.match(/^(Unrecognized type|Unknown node) .* libraries/i)) {
                 return;
             }
 
