@@ -12,12 +12,86 @@ types:
         type: object
         properties:
           count: number
+      complex?:
+        properties:
+          one: string
+          two?: number
+resourceTypes:
+  withDelete:
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              type: object
+              properties:
+                success: boolean
+                statusCode?: integer
+                data:
+                  type: object
+                  properties:
+                    message: string
+              example: |
+                {
+                  "success": true,
+                  "statusCode": 200,
+                  "data": {
+                    "message": "<<objectName>> удален из системы"
+                  }
+                }
+securitySchemes:
+  oauth_2_0:
+    type: x-custom
+    displayName: OAuth 2.0
+    describedBy:
+      headers:
+        Authorization:
+          description: |
+            Передаем токен access_token в данном хэдере.
+            Токен авторизации необходимо сопровождать словом Bearer <access_token>
+          type: string
+          example: Bearer 1237798456iojfdsgf8735n
+      responses:
+        401:
+          body:
+            application/json:
+              properties:
+                test?: integer
+          description: |
+            Неверный, либо устаревший токен авторизации. Возможно, Вам необходимо повторно залогиниться.
+traits:
+  by_room:
+    description: Юзай этот трейт для ресурсов, которые зависят от id квартиры
+    queryParameters:
+      room_id?:
+        type: integer
+        description: ID квартиры в системе
+  success:
+    description: Trait для успешных ответов
+    responses:
+      200:
+        body:
+          application/json:
+            properties:
+              success: boolean
+              statusCode?: integer
+
+
 /helloWorld:
   get:
     responses:
       200:
         body:
           application/json:
+            type: object
+            properties:
+              success: boolean
+              statusCode: integer
+              data:
+                type: object
+                properties:
+                  message: string
+                  op?: boolean
             example: |
               {
                 "message" : "Hello World"
@@ -29,3 +103,23 @@ types:
         properties:
           closure?:
             type: boolean
+          complex2:
+            type: object
+            properties:
+              one: string
+              two?: number
+  /{id}/:
+      type: {withDelete: {objectName: "Сотрудник"}}
+      uriParameters:
+        id?:
+          type: integer
+          description: ID сотрудника в системе
+      get:
+        description: Просмотр данных о сотруднике
+        responses:
+          200:
+            body:
+              application/json:
+                type: object
+                properties:
+                  three?: string
