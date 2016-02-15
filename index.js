@@ -183,9 +183,11 @@ function parse(source) {
         // types
         api.types().forEach(function (type) {
             var typeName = type.name();
-            type.properties().forEach(function(prop) {
-                json.types[typeName] = processProps(json.types[typeName], prop);
-            });
+            if (type.properties) {
+                type.properties().forEach(function (prop) {
+                    json.types[typeName] = processProps(json.types[typeName], prop);
+                });
+            }
         });
 
         // resource types
