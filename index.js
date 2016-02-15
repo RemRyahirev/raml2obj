@@ -107,7 +107,7 @@ function _sourceToRamlObj(source) {
 function parse(source) {
     return _sourceToRamlObj(source).then(function (api) {
         api.errors().forEach(function (x) {
-            if (x.isWarning || x.code === 10) {
+            if (x.isWarning || x.code === 10 || x.message.match(/^Unrecognized type '[^']*\.[^']]'/i) || x.message.match(/^Unrecognized type .* libraries/i)) {
                 return;
             }
 
@@ -295,7 +295,6 @@ function parse(source) {
         // uses
         api.uses().forEach(function(u) {
             var uName = u.name();
-            console.log('u', uName);
             u.types().forEach(function(t) {
                 var tName = t.name();
                 if (t.properties) {
