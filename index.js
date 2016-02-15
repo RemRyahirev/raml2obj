@@ -306,9 +306,9 @@ function parse(source) {
             });
         });
 
-        console.log();
-        console.log();
-        console.log(util.inspect(json, {showHidden: false, depth: null}));
+        //console.log();
+        //console.log();
+        //console.log(util.inspect(json, {showHidden: false, depth: null}));
 
         return _enhanceRamlObj(json);
     });
