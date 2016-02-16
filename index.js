@@ -192,9 +192,11 @@ function parse(source) {
                 });
                 m.body().forEach(function(b) {
                     var bName = b.name();
-                    b.properties().forEach(function(p) {
-                        json.resourceTypes[rtName][mName].body[bName] = processProps(json.resourceTypes[rtName][mName].body[bName], p);
-                    });
+                    if (b.properties) {
+                        b.properties().forEach(function (p) {
+                            json.resourceTypes[rtName][mName].body[bName] = processProps(json.resourceTypes[rtName][mName].body[bName], p);
+                        });
+                    }
                 });
                 m.queryParameters().forEach(function(qp) {
                     var qpName = qp.name();
