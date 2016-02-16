@@ -110,7 +110,7 @@ function parse(source) {
             if (x.isWarning
                 || x.code === 10
                 || x.message.match(/^Unrecognized type '[^']*\.[^']]'/i)
-                || x.message.match(/^Unrecognized type.*libraries/i)
+                || x.message.match(/^Unrecognized type.*(libraries|resourceTypes)/i)
                 || x.message.match(/^Unknown node.*libraries/i)) {
                 return;
             }
